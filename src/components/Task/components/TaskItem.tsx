@@ -1,29 +1,64 @@
 // packages
-import React from 'react';
+import React, { useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 
-// assets
-import { MdModeEdit, MdDelete, MdCheck } from 'react-icons/md';
+// components
+import TaskText from './TaskText';
+import TaskButtons from './TaskButtons';
 
-const TaskItem: React.FC = () => {
+// helpers
+import useInputText from '@/hooks/useInputText';
+import useTaskContext from '@/hooks/useTaskContext';
+import TaskInput from './TaskInput';
+
+const TaskItem: React.FC<TaskItemProps> = props => {
+  const { id, index, text, status } = props;
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const { inputText, inputTextHandler } = useInputText();
+  const { taskHandler } = useTaskContext();
+
+  const editModeHandler = () => {
+    if (inputText !== text) taskHandler({ type: 'UPDATE', data: { id, text: inputText, status } });
+
+    setIsEditMode(prev => !prev);
+    inputTextHandler(isEditMode ? '' : text);
+  };
+
+  const taskInputProps = {
+    inputText,
+    inputTextHandler,
+  };
+
+  const taskTextProps = {
+    text,
+    status,
+  };
+
+  const taskButtonProps = {
+    id,
+    status,
+    isEditMode,
+    editModeHandler,
+  };
+
   return (
-    <div className='flex justify-between items-start gap-8 w-full p-4 bg-[#E8CEE4] rounded-md'>
-      <div className='w-full'>
-        <p className='text-neutral-800 select-none'>
-          The quick brown fox jumps over the lazy dog.
-        </p>
-      </div>
-      <div className='flex gap-2'>
-        <button className='transition-all delay-100 ease-in-out hover:scale-125 '>
-          <MdModeEdit className='text-neutral-800' size={20} />
-        </button>
-        <button className='transition-all delay-100 ease-in-out hover:scale-125 '>
-          <MdDelete className='text-neutral-800' size={20} />
-        </button>
-        <button className='transition-all delay-100 ease-in-out hover:scale-125 '>
-          <MdCheck className='text-neutral-800' size={20} />
-        </button>
-      </div>
-    </div>
+    <Draggable draggableId={id} index={index}>
+      {provided => (
+        <div
+          className={`flex justify-between items-center gap-8 w-full p-4 rounded-sm select-none ${
+            status ? 'bg-[#8A427E]' : 'bg-[#DEBAD8]'
+          }`}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          <div className='w-full'>
+            {isEditMode ? <TaskInput {...taskInputProps} /> : <TaskText {...taskTextProps} />}
+          </div>
+          <TaskButtons {...taskButtonProps} />
+        </div>
+      )}
+    </Draggable>
   );
 };
 

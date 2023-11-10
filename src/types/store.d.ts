@@ -1,15 +1,29 @@
-type TaskActionData = Task | string | undefined;
+/// <reference path="types.ts" />
+
+interface Draggable {
+  id: Required<string>;
+  index: Required<number>;
+}
+
+interface TaskDraggable {
+  taskId: Required<string>;
+  source: Required<Draggable>;
+  destination: Required<Draggable>;
+}
 
 interface TaskState {
   active: Required<Task[]>;
   completed: Required<Task[]>;
-  addHandler: () => void;
-  moveHandler: () => void;
-  removeHandler: () => void;
-  checkHandler: () => void;
+  taskHandler: ReactDispatch;
 }
 
 interface TaskAction {
   type: Required<string>;
-  data: Required<TaskActionData>;
+  text: string;
+  data: Task;
+  draggableData: TaskDraggable;
+}
+
+interface TaskContextProviderProps {
+  children: Component;
 }
