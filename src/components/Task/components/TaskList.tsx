@@ -14,7 +14,7 @@ const TaskList: React.FC<TaskListProps> = props => {
       <Droppable droppableId={id}>
         {provided => (
           <div
-            className='flex flex-col gap-4 w-full p-4 min-h-[500px] bg-[#45404F] rounded-sm'
+            className='flex flex-col gap-4 w-full p-4 min-h-[320px] pb-8 bg-[#45404F] rounded-sm'
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
