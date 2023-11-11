@@ -34,15 +34,16 @@ const Task: React.FC = () => {
   };
 
   return (
-    <section className='w-full p-2 md:p-4 lg:p-8'>
-      <TaskHeader />
-      <div className='flex flex-col lg:flex-row gap-8'>
-        <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <section className='w-full p-2 md:p-4 lg:p-8'>
+        <TaskHeader />
+
+        <div className='flex flex-col lg:flex-row gap-4'>
           <TaskList id='active' title='Active' data={active} />
           <TaskList id='completed' title='Completed' data={completed} />
-        </DragDropContext>
-      </div>
-    </section>
+        </div>
+      </section>
+    </DragDropContext>
   );
 };
 
