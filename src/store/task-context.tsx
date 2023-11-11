@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 // utils
 import insertEl from '@/utils/insertEl';
 
+const SET = 'SET';
 const ADD = 'ADD';
 const UPDATE = 'UPDATE';
 const MOVE = 'MOVE';
@@ -25,6 +26,7 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
   let taskId: string;
   let source: Draggable;
   let destination: Draggable;
+  let storedState: string | null;
 
   switch (action?.type) {
     case ADD:
@@ -38,6 +40,8 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
         ...state,
         active: [...state.active, newTask],
       };
+
+      localStorage.setItem('taskify/tasks', JSON.stringify(newState));
 
       return newState;
     case UPDATE:
@@ -56,6 +60,8 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
           ),
         };
       }
+
+      localStorage.setItem('taskify/tasks', JSON.stringify(newState));
 
       return newState;
     case MOVE:
@@ -108,6 +114,8 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
         }
       }
 
+      localStorage.setItem('taskify/tasks', JSON.stringify(newState));
+
       return newState;
     case REMOVE:
       if (!action.data.status) {
@@ -121,6 +129,8 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
           completed: state.completed.filter(item => item.id !== action.data.id),
         };
       }
+
+      localStorage.setItem('taskify/tasks', JSON.stringify(newState));
 
       return newState;
     case CHECK:
@@ -142,7 +152,13 @@ const taskReducer = (state: TaskState, action: TaskAction): TaskState => {
         };
       }
 
+      localStorage.setItem('taskify/tasks', JSON.stringify(newState));
+
       return newState;
+    case SET:
+      storedState = localStorage.getItem('taskify/tasks');
+
+      return storedState ? JSON.parse(storedState) : state;
     default:
       return state;
   }
