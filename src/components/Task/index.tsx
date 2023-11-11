@@ -15,12 +15,13 @@ const Task: React.FC = () => {
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
-    if (source.droppableId === destination?.droppableId && source.index === destination?.index)
+    if (
+      (source.droppableId === destination?.droppableId && source.index === destination?.index) ||
+      !destination
+    )
       return;
 
     const task = source.droppableId === 'active' ? active[source.index] : completed[source.index];
-
-    console.log(task);
 
     taskHandler({
       type: 'MOVE',
