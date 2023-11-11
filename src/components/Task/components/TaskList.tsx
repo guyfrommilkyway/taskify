@@ -8,8 +8,6 @@ import TaskItem from './TaskItem';
 const TaskList: React.FC<TaskListProps> = props => {
   const { id, title, data } = props;
 
-  console.log(data);
-
   return (
     <div className='w-full'>
       <h6 className='mb-2 text text-neutral-300 uppercase tracking-tighter select-none'>{title}</h6>
@@ -25,10 +23,11 @@ const TaskList: React.FC<TaskListProps> = props => {
                 return <TaskItem key={item.id} index={index} {...item} />;
               })}
             {data.length === 0 && (
-              <p className='my-4 text-sm text-neutral-400 text-center uppercase select-none'>
+              <p className='text-sm text-neutral-400 text-center uppercase select-none'>
                 no tasks found
               </p>
             )}
+            {provided.placeholder}
           </div>
         )}
       </Droppable>
